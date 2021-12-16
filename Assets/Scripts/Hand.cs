@@ -1,0 +1,47 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Animator))]
+public class Hand : MonoBehaviour
+{
+    public float speed;
+    Animator animator;
+    SkinnedMeshRenderer mesh;
+    private float triggerTarget;
+    private float triggerCurrent;
+    private string animatorTriggerParam = "Trigger";
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        mesh = GetComponentInChildren<SkinnedMeshRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        AnimateHand();
+    }
+
+    internal void SetTrigger(float v)
+    {
+        triggerTarget = v;
+    }
+
+    void AnimateHand()
+    {
+        if(triggerCurrent != triggerTarget)
+        {
+            triggerCurrent = Mathf.MoveTowards(triggerCurrent, triggerTarget, Time.deltaTime * speed);
+            animator.SetFloat(animatorTriggerParam, triggerCurrent);
+        }
+    }
+
+    public void ToggleVisibility()
+    {
+        mesh.enabled = !mesh.enabled;
+    }
+}
